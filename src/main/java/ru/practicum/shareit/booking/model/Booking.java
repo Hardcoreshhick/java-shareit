@@ -1,32 +1,41 @@
 package ru.practicum.shareit.booking.model;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
 
 import java.time.LocalDateTime;
 
-/**
- * TODO Sprint add-bookings.
- */
 @Data
+@Builder
+@Entity
+@Table(name = "bookings")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Booking {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull(message = "Дата начала бронирования обязательна")
+    @Column(name = "start_date", nullable = false)
     private LocalDateTime start;
 
-    @NotNull(message = "Дата окончания бронирования обязательна")
+    @Column(name = "end_date", nullable = false)
     private LocalDateTime end;
 
-    @NotNull(message = "Не указан предмет для бронирования")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "item_id", nullable = false)
     private Item item;
 
-    @NotNull(message = "Не указан арендатор")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "booker_id", nullable = false)
     private User booker;
 
-    @NotNull(message = "Не указан статус бронирования")
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private BookingStatus status;
-
 }
