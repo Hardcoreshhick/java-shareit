@@ -2,7 +2,8 @@ package ru.practicum.shareit.request.model;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import ru.practicum.shareit.user.model.User;
 
 import java.time.LocalDateTime;
@@ -11,7 +12,8 @@ import java.time.LocalDateTime;
  * TODO Sprint add-item-requests.
  */
 
-@Data
+@Getter
+@Setter
 public class ItemRequest {
     private Long id;
 
