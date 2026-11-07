@@ -3,6 +3,7 @@ package ru.practicum.shareit.user.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.exception.ConflictException;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.exception.ValidationException;
@@ -19,10 +20,12 @@ import java.util.Objects;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class UserService {
 
     private final UserRepository userRepository;
 
+    @Transactional
     public UserDto create(NewUserDto newUserDto) {
         log.debug("Создание пользователя {}", newUserDto.getEmail());
         validateEmailUnique(newUserDto.getEmail(), null);
@@ -33,6 +36,7 @@ public class UserService {
         return UserMapper.toUserDto(savedUser);
     }
 
+    @Transactional
     public UserDto update(Long userId, UpdateUserDto updateUserDto) {
         log.debug("Обновление пользователя с id={}", userId);
         User existing = getUserOrThrow(userId);
@@ -60,11 +64,8 @@ public class UserService {
     }
 
     public void delete(Long userId) {
-        log.debug("Удаление пользователя с id={}", userId);
-        if (!userRepository.existsById(userId)) {
-            throw new NotFoundException("Пользователь с id " + userId + " не найден");
-        }
-        userRepository.deleteById(userId);
+        User user = getUserOrThrow(userId);
+        userRepository.delete(user);
         log.info("Пользователь удалён: id={}", userId);
     }
 

@@ -1,9 +1,13 @@
-package ru.practicum.shareit.item.dto;
+package ru.practicum.shareit.item.dto.itemDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import ru.practicum.shareit.item.dto.commentDto.CommentDto;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Builder
@@ -14,5 +18,7 @@ public class ItemDto {
     private String name;
     private String description;
     private Boolean available;
-    private Long requestId;
+    private LocalDateTime lastBooking;
+    private LocalDateTime nextBooking;
+    private List<CommentDto> comments;
 }

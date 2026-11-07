@@ -2,10 +2,14 @@ package ru.practicum.shareit.item.mapper;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import ru.practicum.shareit.item.dto.ItemDto;
-import ru.practicum.shareit.item.dto.NewItemDto;
-import ru.practicum.shareit.item.dto.UpdateItemDto;
+import ru.practicum.shareit.item.dto.commentDto.CommentDto;
+import ru.practicum.shareit.item.dto.itemDto.ItemDto;
+import ru.practicum.shareit.item.dto.itemDto.NewItemDto;
+import ru.practicum.shareit.item.dto.itemDto.UpdateItemDto;
 import ru.practicum.shareit.item.model.Item;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ItemMapper {
@@ -19,7 +23,6 @@ public class ItemMapper {
                 .name(item.getName())
                 .description(item.getDescription())
                 .available(item.getAvailable())
-                .requestId(item.getRequest() != null ? item.getRequest().getId() : null)
                 .build();
     }
 
@@ -41,7 +44,6 @@ public class ItemMapper {
         Item item = new Item();
         item.setId(existing.getId());
         item.setOwner(existing.getOwner());
-        item.setRequest(existing.getRequest());
         item.setName(dto.getName() != null && !dto.getName().isBlank()
                 ? dto.getName()
                 : existing.getName());
@@ -53,4 +55,22 @@ public class ItemMapper {
                 : existing.getAvailable());
         return item;
     }
+
+    public static ItemDto toDto(Item item,
+                                List<CommentDto> comments,
+                                LocalDateTime lastBooking,
+                                LocalDateTime nextBooking) {
+        if (item == null) return null;
+
+        return ItemDto.builder()
+                .id(item.getId())
+                .name(item.getName())
+                .description(item.getDescription())
+                .available(item.getAvailable())
+                .comments(comments)
+                .lastBooking(lastBooking)
+                .nextBooking(nextBooking)
+                .build();
+    }
 }
+
