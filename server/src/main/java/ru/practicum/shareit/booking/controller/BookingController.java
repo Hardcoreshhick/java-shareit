@@ -1,8 +1,6 @@
 package ru.practicum.shareit.booking.controller;
 
-import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.NewBookingDto;
@@ -11,7 +9,6 @@ import ru.practicum.shareit.booking.service.BookingService;
 
 import java.util.List;
 
-@Validated
 @RestController
 @RequestMapping(path = "/bookings")
 @RequiredArgsConstructor
@@ -20,14 +17,14 @@ public class BookingController {
     private final BookingService bookingService;
 
     @PostMapping
-    public BookingDto createBooking(@RequestHeader("X-Sharer-User-Id") @Positive Long userId,
+    public BookingDto createBooking(@RequestHeader("X-Sharer-User-Id") Long userId,
                                     @RequestBody NewBookingDto newBookingDto) {
         return bookingService.createBooking(newBookingDto, userId);
     }
 
     @PatchMapping("/{bookingId}")
-    public BookingDto approveBooking(@RequestHeader("X-Sharer-User-Id") @Positive Long userId,
-                                     @PathVariable @Positive Long bookingId,
+    public BookingDto approveBooking(@RequestHeader("X-Sharer-User-Id") Long userId,
+                                     @PathVariable Long bookingId,
                                      @RequestParam boolean approved) {
         return bookingService.approveBooking(bookingId, userId, approved);
     }
@@ -39,7 +36,7 @@ public class BookingController {
     }
 
     @GetMapping
-    public List<BookingDto> getBookingsByBooker(@RequestHeader("X-Sharer-User-Id")  @Positive Long userId,
+    public List<BookingDto> getBookingsByBooker(@RequestHeader("X-Sharer-User-Id") Long userId,
                                                 @RequestParam(defaultValue = "ALL")BookingState state) {
         return bookingService.getBookingsByBooker(userId, state);
     }

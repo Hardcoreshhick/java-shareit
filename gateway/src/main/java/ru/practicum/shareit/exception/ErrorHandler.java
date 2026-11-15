@@ -41,14 +41,4 @@ public class ErrorHandler {
         log.warn("400: Отсутствует заголовок {}", ex.getHeaderName());
         return new ErrorResponse("Отсутствует обязательный заголовок: " + ex.getHeaderName());
     }
-
-    @ExceptionHandler(Exception.class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ErrorResponse handleException(Exception ex) {
-        // Логируем полную ошибку (со стектрейсом) для разработчиков
-        log.error("500: Непредвиденная ошибка", ex);
-
-        // Клиенту отдаем безопасное общее сообщение (Вариант 1)
-        return new ErrorResponse("Внутренняя ошибка сервера. Пожалуйста, обратитесь в поддержку.");
-    }
 }
